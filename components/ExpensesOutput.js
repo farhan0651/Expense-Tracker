@@ -1,4 +1,5 @@
 import { View, Text, FlatList, StyleSheet } from "react-native";
+import ExpenseItem from "./ExpenseItem";
 
 const Dummy_expenses=[
         {id:'e1', description:'A pair of shoes', amount:59.99, date: new Date('2022-12-19')},
@@ -8,7 +9,7 @@ const Dummy_expenses=[
     ]
 
     function renderExpenseItem(itemData){
-        return <Text>{itemData.item.description}: {itemData.item.amount}</Text>
+        return <ExpenseItem {...itemData.item} />
     }
 
 function ExpensesOutput({expenses, expensePeriod}){
