@@ -1,19 +1,16 @@
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import ExpenseItem from "./ExpenseItem";
 
-const Dummy_expenses=[
-        {id:'e1', description:'A pair of shoes', amount:59.99, date: new Date('2022-12-19')},
-        {id:'e2', description:'A pair of trousers', amount:89.29, date: new Date('2022-12-18')},
-        {id:'e3', description:'A pair of shirts', amount:29.99, date: new Date('2022-12-17')},
-        {id:'e4', description:'A pair of socks', amount:9.99, date: new Date('2022-12-16')}
-    ]
-
     function renderExpenseItem(itemData){
         return <ExpenseItem {...itemData.item} />
     }
 
-function ExpensesOutput({expenses, expensePeriod}){
-    const expenseSum= Dummy_expenses.reduce((Sum, expense)=> { return Sum+expense.amount},0)
+function ExpensesOutput({expenses, expensePeriod, fallBackText}) {
+    const expenseSum= expenses.reduce((Sum, expense)=> { return Sum+expense.amount},0)
+    let content= <Text style={styles.infoText}>{fallBackText}</Text>
+    if(expenses.length>0){
+        content= <FlatList data={expenses} renderItem={renderExpenseItem} keyExtractor={(item)=>item.id} />
+    }
     return (
     <>
     <View style={styles.rootContainer}>
@@ -21,7 +18,7 @@ function ExpensesOutput({expenses, expensePeriod}){
     <Text style={styles.period}>{expensePeriod}: </Text>
     <Text style={styles.sum}>{expenseSum.toFixed(2)}</Text>
     </View>
-    <FlatList data={Dummy_expenses} renderItem={renderExpenseItem} keyExtractor={(item)=>item.id} />
+    {content}
     </View>
     </>
     );
@@ -33,7 +30,9 @@ export default ExpensesOutput;
 const styles=StyleSheet.create({
     rootContainer:{
         flex: 1,
-        padding: 24,
+        paddingHorizontal: 24,
+        paddingTop: 24,
+        paddingBottom: 0,
         backgroundColor: '#29bdfd',
     },
     Summarycontainer:{
@@ -52,5 +51,11 @@ const styles=StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         color: '#ffffff',
+    },
+    infoText:{
+        color: '#ffffff',
+        textAlign: 'center',
+        marginTop: 32,
+        fontSize: 16,
     }
 })
